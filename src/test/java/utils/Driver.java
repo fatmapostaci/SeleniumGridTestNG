@@ -1,6 +1,5 @@
-package ondia.utils;
+package utils;
 
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -19,6 +19,7 @@ import java.time.Duration;
 public class Driver {
 
     private static WebDriver driver;
+    private static Process process;  //class seviyesinde tanımlanır.
 
     private Driver() {
     }//new keyword'ü ile başka class'lardan bu class'ın bir objesinin oluşturulmasının önüne geçer.
@@ -65,11 +66,19 @@ public class Driver {
                     driver = new SafariDriver();
                     break;
                 case "remote":
+
+                    //kod ile terminalden selenium grid bağlantısı kurulur
+                    try {
+                        process = new ProcessBuilder().command("cmd.exe","/c","java -jar selenium-server-4.31.0.jar standalone").start();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     DesiredCapabilities capabilities = new DesiredCapabilities();
-                    capabilities.setCapability("browserName",ConfigReader.getProperty("browser"));
+                    capabilities.setCapability("browserName","chrome");
                     //capabilities.setCapability("platformName", Platform.WIN11);
                     try {
-                        driver = new RemoteWebDriver(new URL("http://192.168.1.121:4444"),capabilities);
+                        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),capabilities);
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
                     }
@@ -101,6 +110,7 @@ public class Driver {
         if (driver != null) {//Eğer driver null değil(oluşturulmuş) ise quit() metodunu kullan.
             driver.quit();
             driver = null;//quit() işlemi sonrası getDriver() methodunun tekrar çalışabilmsi için gerekli.
+            process.destroy();
         }
 
     }
