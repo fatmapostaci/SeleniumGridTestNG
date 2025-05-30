@@ -13,7 +13,7 @@ import static utils.Driver.getDriver;
 public class GridTestWithDriverClass {
 
     @Test
-    public void gridTest(){
+    public void gridTest() throws InterruptedException {
 
         getDriver().get(getProperty("contact_list_url"));
 
@@ -27,7 +27,7 @@ public class GridTestWithDriverClass {
         Assert.assertTrue(homePage.isAddButtonDisplayed());
         Assert.assertTrue(homePage.isLogoutButtonDisplayed());
         Assert.assertTrue(getDriver().getTitle().contains("Contacts"));
-
+        Thread.sleep(3000);
         closeDriver();
     }
 }
