@@ -19,11 +19,11 @@ public class GridTestWithDriverClass {
 
         ContactListLoginPage loginPage = new ContactListLoginPage(getDriver());
         ContactListHomePage homePage = new ContactListHomePage(getDriver());
-
+        Thread.sleep(3000);
         loginPage.enterEmail(getProperty("contact_list_username"))
                 .enterPassword(getProperty("contact_list_password"))
                 .clickSubmit();
-
+        Thread.sleep(3000);
         Assert.assertTrue(homePage.isAddButtonDisplayed());
         Assert.assertTrue(homePage.isLogoutButtonDisplayed());
         Assert.assertTrue(getDriver().getTitle().contains("Contacts"));
