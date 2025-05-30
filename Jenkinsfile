@@ -3,10 +3,10 @@ pipeline{
 
     stages{
 
-    stage('test'){
+        stage('test'){
 
-        steps{
-            script{
+            steps{
+                script{
 
                     try {
                         // Execute Test
@@ -17,10 +17,9 @@ pipeline{
                         currentBuild.result = 'UNSTABLE'
                     }
 
-            }
+                }
         }
 
-    }
-    }
+  }
 
 }
