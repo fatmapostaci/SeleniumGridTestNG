@@ -1,13 +1,9 @@
-pipeline{
+pipeline {
     agent any
-
-    stages{
-
-        stage('test'){
-
-            steps{
-                script{
-
+    stages {
+        stage('Test') {
+            steps {
+                script {
                     try {
                         // Execute Test
                         bat 'mvn test'
@@ -16,10 +12,15 @@ pipeline{
                         // Find assertion failure make build UNSTABLE
                         currentBuild.result = 'UNSTABLE'
                     }
-
                 }
+            }
         }
-
-  }
-}
+    }
+    post {
+        unstable {
+            mail to: 'yasinanil.67@gmail.com',
+                 subject: "Build Unstable",
+                 body: "Build is unstable due to test failures."
+        }
+    }
 }
